@@ -1,7 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    attr_extras (6.2.4)
+    byebug (11.1.3)
+    coderay (1.1.3)
     concurrent-ruby (1.1.7)
+    diff-lcs (1.4.4)
     dry-auto_inject (0.7.0)
       dry-container (>= 0.3.4)
     dry-configurable (0.11.6)
@@ -27,6 +31,18 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
+    dry-monads (1.3.5)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.4, >= 0.4.4)
+      dry-equalizer
+    dry-schema (1.5.6)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.8, >= 0.8.3)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-initializer (~> 3.0)
+      dry-logic (~> 1.0)
+      dry-types (~> 1.4)
     dry-struct (1.3.0)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer (~> 0.3)
@@ -48,20 +64,68 @@ GEM
       dry-equalizer (~> 0.3)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
+    dry-validation (1.5.6)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.7, >= 0.7.1)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-initializer (~> 3.0)
+      dry-schema (~> 1.5, >= 1.5.2)
+    faker (2.14.0)
+      i18n (>= 1.6, < 2)
+    i18n (1.8.5)
+      concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    method_source (1.0.0)
     nio4r (2.5.4)
+    null-logger (0.1.7)
+    patience_diff (1.1.0)
+      trollop (~> 1.16)
+    pry (0.13.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    pry-byebug (3.9.0)
+      byebug (~> 11.0)
+      pry (~> 0.13.0)
     puma (5.0.4)
       nio4r (~> 2.0)
     rake (13.0.1)
+    rspec (3.10.0)
+      rspec-core (~> 3.10.0)
+      rspec-expectations (~> 3.10.0)
+      rspec-mocks (~> 3.10.0)
+    rspec-core (3.10.0)
+      rspec-support (~> 3.10.0)
+    rspec-expectations (3.10.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-mocks (3.10.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-support (3.10.0)
+    super_diff (0.5.2)
+      attr_extras (>= 6.2.4)
+      diff-lcs
+      patience_diff
+    trollop (1.16.2)
+    warning (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   dry-effects
+  dry-monads
   dry-system
+  dry-validation
+  faker
+  null-logger
+  pry-byebug
   puma
   rake
+  rspec
+  super_diff
+  warning
 
 RUBY VERSION
    ruby 2.7.2p137
