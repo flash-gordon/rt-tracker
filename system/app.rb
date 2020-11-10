@@ -17,14 +17,15 @@ module RtTracker
   class App < ::Dry::Effects::System::Container
     config.loader = Loader
     config.default_namespace = 'rt_tracker'
-    config.root = ::File.expand_path(::File.join(__dir__, '../..'))
+    config.root = ::File.expand_path(::File.join(__dir__, '..'))
+
+    register('env') { ENV['RACK_ENV'] }
 
     load_paths!(*[
       ::File.expand_path("#{root}/lib"),
       ::File.expand_path("#{root}/app"),
-      ::File.expand_path("#{__dir__}/..")
     ])
   end
 
-  Import = injector(dynamic: App[:env].eql?('test'))
+  Import = App.injector(dynamic: App[:env].eql?('test'))
 end

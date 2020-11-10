@@ -1,3 +1,5 @@
+ENV['RACK_ENV'] = 'test'
+
 require 'pry-byebug'
 require_relative '../system/app'
 
@@ -6,6 +8,11 @@ require 'warning'
 require 'super_diff/rspec'
 
 require 'dry/effects'
+
+Warning.ignore(/roda/)
+Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
+
+SPEC_ROOT = __dir__
 
 Dry::Effects.load_extensions(:rspec)
 
@@ -23,6 +30,17 @@ RSpec.configure do |config|
 
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true
+  end
+
+  config.define_derived_metadata(file_path: %r{spec/routes}) do |metadata|
+    metadata[:routes] = true
+  end
+
+  config.when_first_matching_example_defined :routes do
+    require 'rt_tracker/routes/api'
+    require_relative 'helpers/request_helper'
+
+    config.include RequestHelper, :routes
   end
 
   config.disable_monkey_patching!
