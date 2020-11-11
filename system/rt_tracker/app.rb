@@ -30,9 +30,13 @@ module RtTracker
       end
     end
 
-    config.inflector = ::Dry::Inflector.new do
+    inflector = ::Dry::Inflector.new do
       _1.acronym('API', 'COVID19')
     end
+
+    config.inflector = inflector
+
+    register('inflector') { inflector }
 
     load_paths!(*[
       ::File.expand_path("#{root}/lib"),
