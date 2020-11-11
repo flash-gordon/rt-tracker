@@ -1,7 +1,8 @@
 ENV['RACK_ENV'] = 'test'
+Warning[:experimental] = false
 
 require 'pry-byebug'
-require_relative '../system/app'
+require_relative '../system/rt_tracker/app'
 
 require 'faker'
 require 'warning'
@@ -10,11 +11,13 @@ require 'super_diff/rspec'
 require 'dry/effects'
 
 Warning.ignore(/roda/)
-Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
+# Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
 
 SPEC_ROOT = __dir__
 
 Dry::Effects.load_extensions(:rspec)
+
+RtTracker::App.init(:logger)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -41,6 +44,30 @@ RSpec.configure do |config|
     require_relative 'helpers/request_helper'
 
     config.include RequestHelper, :routes
+  end
+
+
+  config.when_first_matching_example_defined :webrick do
+    require_relative 'helpers/webrick_helper'
+
+    config.include WEBrickHelper, :webrick
+  end
+
+  config.include Dry::Effects::Handler.Resolve(RtTracker::App)
+  config.include Dry::Effects::Handler.Timestamp
+  config.include Module.new {
+    extend RSpec::SharedContext
+    let(:deps) { {} }
+  }
+
+  config.around do |ex|
+    provide(deps) do
+      RtTracker::TaggedLogger.() do
+        with_timestamp do
+          ex.run
+        end
+      end
+    end
   end
 
   config.disable_monkey_patching!

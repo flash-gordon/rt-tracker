@@ -11,6 +11,7 @@ gem 'puma'
 gem 'rake'
 
 gem 'dry-effects'
+gem 'dry-events'
 gem 'dry-monads'
 gem 'dry-validation'
 gem 'dry-system'

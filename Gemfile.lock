@@ -25,6 +25,10 @@ GEM
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-initializer (~> 3.0)
     dry-equalizer (0.3.0)
+    dry-events (0.2.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
     dry-inflector (0.2.0)
     dry-initializer (3.0.4)
     dry-logic (1.0.8)
@@ -120,6 +124,7 @@ PLATFORMS
 
 DEPENDENCIES
   dry-effects
+  dry-events
   dry-monads
   dry-system
   dry-validation

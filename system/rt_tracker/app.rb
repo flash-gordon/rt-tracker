@@ -4,6 +4,7 @@ require 'dry/core/inflector'
 require 'dry/inflector'
 Dry::Core::Inflector.select_backend(:dry_inflector)
 
+require 'dry/core/constants'
 require 'dry/validation'
 Dry::Schema.load_extensions(:monads)
 Dry::Validation.load_extensions(:monads)
@@ -14,12 +15,24 @@ Dry::Effects.load_extensions(:system)
 require_relative 'app/loader'
 
 module RtTracker
+  include ::Dry::Core::Constants
+
   class App < ::Dry::Effects::System::Container
     config.loader = Loader
     config.default_namespace = 'rt_tracker'
-    config.root = ::File.expand_path(::File.join(__dir__, '..'))
+    config.root = ::File.expand_path(::File.join(__dir__, '../..'))
 
     register('env') { ENV['RACK_ENV'] }
+
+    namespace('env') do
+      %w(test development production).each do |env|
+        register(env) { App['env'].eql?(env) }
+      end
+    end
+
+    inflector = ::Dry::Inflector.new do
+      _1.acronym('API')
+    end
 
     load_paths!(*[
       ::File.expand_path("#{root}/lib"),
@@ -29,3 +42,5 @@ module RtTracker
 
   Import = App.injector(dynamic: App[:env].eql?('test'))
 end
+
+require_relative 'boot/logger'
