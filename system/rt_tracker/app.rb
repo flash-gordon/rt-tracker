@@ -30,8 +30,8 @@ module RtTracker
       end
     end
 
-    inflector = ::Dry::Inflector.new do
-      _1.acronym('API')
+    config.inflector = ::Dry::Inflector.new do
+      _1.acronym('API', 'COVID19')
     end
 
     load_paths!(*[

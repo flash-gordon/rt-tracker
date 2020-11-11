@@ -9,6 +9,7 @@ require 'warning'
 require 'super_diff/rspec'
 
 require 'dry/effects'
+require 'dry/monads'
 
 Warning.ignore(/roda/)
 # Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
@@ -46,13 +47,13 @@ RSpec.configure do |config|
     config.include RequestHelper, :routes
   end
 
-
   config.when_first_matching_example_defined :webrick do
     require_relative 'helpers/webrick_helper'
 
     config.include WEBrickHelper, :webrick
   end
 
+  config.include Dry::Monads[:result]
   config.include Dry::Effects::Handler.Resolve(RtTracker::App)
   config.include Dry::Effects::Handler.Timestamp
   config.include Module.new {
