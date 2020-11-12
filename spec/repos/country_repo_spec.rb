@@ -19,13 +19,7 @@ RSpec.describe RtTracker::Repos::CountryRepo do
       data = repo.get('russia').value!
       expect(data.size).to eql(89)
       expect(data[0]).to eql(
-        country: 'Russian Federation',
         country_code: 'RU',
-        province: nil,
-        city: nil,
-        city_code: nil,
-        lat: 61.52,
-        lon: 105.32,
         confirmed: 910778,
         deaths: 15467,
         recovered: 721473,

@@ -5,8 +5,9 @@ require 'pry-byebug'
 require_relative '../system/rt_tracker/app'
 
 require 'faker'
-require 'warning'
 require 'super_diff/rspec'
+require 'time_calc'
+require 'warning'
 
 require 'dry/effects'
 require 'dry/monads'
@@ -59,21 +60,31 @@ RSpec.configure do |config|
 
   config.include Dry::Monads[:result]
   config.include Dry::Effects::Handler.Resolve(RtTracker::App)
+  config.include Dry::Effects::Handler.CurrentTime
   config.include Dry::Effects::Handler.Timestamp
   config.include Module.new {
     extend RSpec::SharedContext
     let(:deps) { {} }
+
+    def tc(time)
+      (yield TimeCalc.wrap(time)).unwrap
+    end
   }
 
   config.around do |ex|
     provide(deps) do
       RtTracker::TaggedLogger.() do
         with_timestamp do
-          ex.run
+          with_current_time do
+            ex.run
+          end
         end
       end
     end
   end
+
+  config.include Dry::Effects.CurrentTime
+  config.include Dry::Effects.Timestamp
 
   config.disable_monkey_patching!
 

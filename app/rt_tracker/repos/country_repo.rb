@@ -9,13 +9,7 @@ module RtTracker
 
       CountryStats = ::Dry::Schema.JSON do
         required(:stats).array(:hash) do
-          required(:country).value(:string)
           required(:country_code).value(:string)
-          required(:province).maybe(::Types::NonEmptyString)
-          required(:city).maybe(::Types::NonEmptyString)
-          required(:city_code).maybe(::Types::NonEmptyString)
-          required(:lat).value(::Types::Coercible::Float)
-          required(:lon).value(::Types::Coercible::Float)
           required(:confirmed).value(:integer)
           required(:deaths).value(:integer)
           required(:recovered).value(:integer)
