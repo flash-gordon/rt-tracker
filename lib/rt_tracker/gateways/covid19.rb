@@ -12,12 +12,14 @@ module RtTracker
 
       HOST = 'https://api.covid19api.com'
 
-      def call(path:)
+      def get(path:)
         code, _headers, body = yield http_call.(url: "#{HOST}#{path}", method: :get)
 
         if code.eql?(200)
           case parse_json.(body)
           in Success(json)
+            Success(transform_response(json))
+          in Success(*json)
             Success(transform_response(json))
           in Failure(error)
             Failure[:invalid_json, error]
