@@ -4,16 +4,16 @@ require 'dry/effects'
 
 module RtTracker
   module Middleware
-    class Resolve
-      include ::Dry::Effects::Handler.Resolve
+    class Timestamp
+      include ::Dry::Effects::Handler.Timestamp
+      include Import['env.test']
 
       def initialize(app)
         @app = app
-        @overridable = App['env.test']
       end
 
       def call(env)
-        provide(App, overridable: @overridable) { @app.(env) }
+        with_timestamp(overridable: test) { @app.(env) }
       end
     end
   end

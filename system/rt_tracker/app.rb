@@ -48,4 +48,5 @@ module RtTracker
 end
 
 require 'types'
+require_relative 'boot/api'
 require_relative 'boot/logger'

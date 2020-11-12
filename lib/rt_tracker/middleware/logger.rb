@@ -1,19 +1,17 @@
 # auto_register: false
 
 require 'dry/effects'
+require 'rt_tracker/tagged_logger'
 
 module RtTracker
   module Middleware
-    class Resolve
-      include ::Dry::Effects::Handler.Resolve
-
+    class Logger
       def initialize(app)
         @app = app
-        @overridable = App['env.test']
       end
 
       def call(env)
-        provide(App, overridable: @overridable) { @app.(env) }
+        TaggedLogger.() { @app.(env) }
       end
     end
   end

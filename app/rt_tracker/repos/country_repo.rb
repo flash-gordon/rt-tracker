@@ -19,7 +19,7 @@ module RtTracker
       end
 
       def get(country_name)
-        data = yield gateway.get(path: "/countries/#{country_name}")
+        data = yield gateway.get(path: "/country/#{country_name}")
         values = yield CountryStats.(stats: data)
 
         Success(values[:stats])

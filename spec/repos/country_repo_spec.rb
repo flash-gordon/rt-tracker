@@ -10,7 +10,7 @@ RSpec.describe RtTracker::Repos::CountryRepo do
 
     before do
       expect(http_call).to receive(:call).with(
-        url: 'https://api.covid19api.com/countries/russia',
+        url: 'https://api.covid19api.com/country/russia',
         method: :get
       ).and_return(Success([200, {}, fixture('covid19api/countries-ru.json')]))
     end

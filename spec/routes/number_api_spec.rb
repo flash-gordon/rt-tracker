@@ -29,7 +29,7 @@ RSpec.describe RtTracker::Routes::NumberAPI do
     context 'success' do
       before do
         expect(gateway).to receive(:get).with(
-          path: '/countries/russia'
+          path: '/country/russia'
         ).and_return(Success(country_data))
       end
 
@@ -45,7 +45,7 @@ RSpec.describe RtTracker::Routes::NumberAPI do
       context 'COVID API failure' do
         before do
           expect(gateway).to receive(:get).with(
-            path: '/countries/russia'
+            path: '/country/russia'
           ).and_return(Failure('💥'))
         end
 
@@ -60,7 +60,7 @@ RSpec.describe RtTracker::Routes::NumberAPI do
       context 'Rt calculation error' do
         before do
           expect(gateway).to receive(:get).with(
-            path: '/countries/russia'
+            path: '/country/russia'
           ).and_return(Success(country_data.take(3)))
         end
 
