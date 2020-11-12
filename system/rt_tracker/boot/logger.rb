@@ -11,11 +11,12 @@ RtTracker::App.boot(:logger) do |app|
       register(:log_output, $stdout)
     end
 
-    register(:logger, RtTracker::TaggedLogger.new.freeze)
+    app.register(:logger, RtTracker::TaggedLogger.new.freeze)
   end
 
   start do
     output = ::Logger.new(app['log_output'])
+
     log = proc do |event|
       payload = event.payload
       tags = payload.fetch(:tags).map { "[#{_1}]" }.join(' ')
@@ -32,6 +33,6 @@ RtTracker::App.boot(:logger) do |app|
       end
     end
 
-    logger.subscribe(level: %i(debug info warn error fatal), &log)
+    app['logger'].subscribe(level: %i(debug info warn error fatal), &log)
   end
 end
