@@ -47,4 +47,5 @@ module RtTracker
   Import = App.injector(dynamic: App[:env].eql?('test'))
 end
 
+require 'types'
 require_relative 'boot/logger'

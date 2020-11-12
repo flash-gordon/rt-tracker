@@ -12,13 +12,15 @@ require 'dry/effects'
 require 'dry/monads'
 
 Warning.ignore(/roda/)
-# Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
+Warning.process { raise RuntimeError, _1 } unless ENV['NO_RAISE_ON_WARNING']
 
 SPEC_ROOT = __dir__
 
 Dry::Effects.load_extensions(:rspec)
 
 RtTracker::App.init(:logger)
+
+Dir["#{SPEC_ROOT}/support/**/*.rb"].sort.each { require _1 }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -52,6 +54,8 @@ RSpec.configure do |config|
 
     config.include WEBrickHelper, :webrick
   end
+
+  config.include FixtureHelper
 
   config.include Dry::Monads[:result]
   config.include Dry::Effects::Handler.Resolve(RtTracker::App)
