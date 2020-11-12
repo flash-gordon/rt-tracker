@@ -11,6 +11,10 @@ module RequestHelper
     last_response
   end
 
+  def status
+    last_response.status
+  end
+
   def json_response
     JSON.parse(response.body, symbolize_names: true)
   end

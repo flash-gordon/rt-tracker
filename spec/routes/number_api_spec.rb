@@ -36,7 +36,40 @@ RSpec.describe RtTracker::Routes::NumberAPI do
       specify do
         get '/numbers/russia'
 
+        expect(status).to eql(200)
         expect(json_response).to eql(country_code: 'RU', rt: 0.88)
+      end
+    end
+
+    context 'failure' do
+      context 'COVID API failure' do
+        before do
+          expect(gateway).to receive(:get).with(
+            path: '/countries/russia'
+          ).and_return(Failure('💥'))
+        end
+
+        specify do
+          get '/numbers/russia'
+
+          expect(status).to eql(503)
+          expect(json_response).to eql(error: 'service unavailable')
+        end
+      end
+
+      context 'Rt calculation error' do
+        before do
+          expect(gateway).to receive(:get).with(
+            path: '/countries/russia'
+          ).and_return(Success(country_data.take(3)))
+        end
+
+        specify do
+          get '/numbers/russia'
+
+          expect(status).to eql(425)
+          expect(json_response).to eql(error: 'not enough data collected')
+        end
       end
     end
   end

@@ -10,13 +10,27 @@ module RtTracker
         'fun.to_json'
       ]
 
+      plugin :status_handler
+
+      status_handler(425) do
+        to_json.(error: 'not enough data collected')
+      end
+
+      status_handler(503) do
+        to_json.(error: 'service unavailable')
+      end
+
       route do |r|
         r.get :country do |country|
           case show.(country)
           in Success(result)
             to_json.(result)
+          in Failure[:not_enough_values]
+            response.status = 425
+            nil
           in Failure
-            'error'
+            response.status = 503
+            nil
           end
         end
       end
