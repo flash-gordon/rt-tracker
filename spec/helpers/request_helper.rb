@@ -1,7 +1,7 @@
 require 'rack/test'
 
 module RequestHelper
-  include Rack::Test::Methods
+  include ::Rack::Test::Methods
 
   def app
     RtTracker::Routes::API.app
