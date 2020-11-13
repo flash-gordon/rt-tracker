@@ -15,7 +15,7 @@ task cli: :env do
   stack.() do
     cli = RtTracker::CLIContext.new
     prompt = Pry::Prompt.new(
-      :rt_trackr,
+      :rt_tracker,
       'Custom prompt',
       [proc { 'rt_tracker> ' }, proc { 'rt_tracker*> ' }]
     )
