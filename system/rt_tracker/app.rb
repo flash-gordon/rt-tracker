@@ -14,6 +14,12 @@ Dry::Effects.load_extensions(:system)
 
 require_relative 'app/loader'
 
+unless ENV['RACK_ENV'].eql?('production')
+  require 'dotenv'
+  env_files = [".env.#{ENV['RACK_ENV']}", '.env'].select { File.exist?(_1) }
+  Dotenv.load(*env_files) unless env_files.empty?
+end
+
 module RtTracker
   include ::Dry::Core::Constants
 
@@ -27,6 +33,10 @@ module RtTracker
     namespace('env') do
       %w(test development production).each do |env|
         register(env) { App['env'].eql?(env) }
+      end
+
+      namespace('redis') do
+        register('url') { ENV['REDIS_URL'] }
       end
     end
 
@@ -50,3 +60,4 @@ end
 require 'types'
 require_relative 'boot/api'
 require_relative 'boot/logger'
+require_relative 'boot/redlock'

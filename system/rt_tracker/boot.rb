@@ -2,6 +2,7 @@ require_relative 'app'
 
 RtTracker::App.start(:logger)
 RtTracker::App.start(:api)
+RtTracker::App.start(:redlock)
 RtTracker::App.auto_register!('app') do |config|
   config.exclude do
     %r{/routes/}.match?(_1.path)

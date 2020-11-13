@@ -10,6 +10,7 @@ gem 'roda'
 gem 'pry-byebug'
 gem 'puma'
 gem 'rake'
+gem 'redlock'
 gem 'time_calc'
 
 gem 'dry-effects'
@@ -25,4 +26,8 @@ group :test do
   gem 'rspec'
   gem 'super_diff'
   gem 'warning'
+end
+
+group :development, :test do
+  gem 'dotenv'
 end
