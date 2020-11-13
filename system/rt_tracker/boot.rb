@@ -1,6 +1,8 @@
 require_relative 'app'
 
-require 'bundler/require'
+require 'bundler/setup'
+
+Bundler.require
 
 RtTracker::App.start(:logger)
 RtTracker::App.start(:api)
