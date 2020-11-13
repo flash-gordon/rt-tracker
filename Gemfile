@@ -5,11 +5,13 @@ source 'https://rubygems.org'
 
 git_source(:github) { "https://github.com/#{_1}" }
 
+gem 'connection_pool'
 gem 'oj'
 gem 'roda'
 gem 'pry-byebug'
 gem 'puma'
 gem 'rake'
+gem 'redis'
 gem 'redlock'
 gem 'time_calc'
 

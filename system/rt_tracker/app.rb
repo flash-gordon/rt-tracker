@@ -55,9 +55,11 @@ module RtTracker
   end
 
   Import = App.injector(dynamic: App[:env].eql?('test'))
+  KwargsImport = App.injector(effects: false)
 end
 
 require 'types'
 require_relative 'boot/api'
 require_relative 'boot/logger'
 require_relative 'boot/redlock'
+require_relative 'boot/redis'

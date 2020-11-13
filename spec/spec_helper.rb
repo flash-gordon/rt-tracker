@@ -69,6 +69,10 @@ RSpec.configure do |config|
     def tc(time)
       (yield TimeCalc.wrap(time)).unwrap
     end
+
+    def `(key)
+      RtTracker::App[key]
+    end
   }
 
   config.around do |ex|
