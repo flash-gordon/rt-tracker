@@ -16,6 +16,10 @@ module RtTracker
         to_json.(error: 'not enough data collected')
       end
 
+      status_handler(429) do
+        to_json.(error: 'try again later')
+      end
+
       status_handler(503) do
         to_json.(error: 'service unavailable')
       end
@@ -27,6 +31,9 @@ module RtTracker
             to_json.(result)
           in Failure[:not_enough_values]
             response.status = 425
+            nil
+          in Failure[:try_again_later]
+            response.status = 429
             nil
           in Failure
             response.status = 503

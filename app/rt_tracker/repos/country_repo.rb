@@ -1,3 +1,4 @@
+require 'dry/effects'
 require 'dry/monads'
 require 'dry/schema'
 
@@ -5,6 +6,7 @@ module RtTracker
   module Repos
     class CountryRepo
       include ::Dry::Monads[:result, :do]
+      include ::Dry::Effects.Lock
       include Import[gateway: 'gateways.covid19']
 
       CountryStats = ::Dry::Schema.JSON do
@@ -19,10 +21,14 @@ module RtTracker
       end
 
       def get(country_name)
-        data = yield gateway.get(path: "/country/#{country_name}")
-        values = yield CountryStats.(stats: data)
+        if lock([:country_data, country_name])
+          data = yield gateway.get(path: "/country/#{country_name}")
+          values = yield CountryStats.(stats: data)
 
-        Success(values[:stats])
+          Success(values[:stats])
+        else
+          Failure[:try_again_later]
+        end
       end
     end
   end

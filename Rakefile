@@ -1,5 +1,7 @@
 ENV['RACK_ENV'] ||= 'development'
 
+require 'bundler/setup'
+
 task :env do
   require File.expand_path('system/rt_tracker/boot',  __dir__)
 end

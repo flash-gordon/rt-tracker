@@ -1,7 +1,7 @@
 RtTracker::App.boot(:redis) do |app|
   init do
-    Kernel.require 'redis'
-    Kernel.require 'connection_pool'
+    require 'redis'
+    require 'connection_pool'
   end
 
   start do

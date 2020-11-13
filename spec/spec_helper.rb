@@ -4,6 +4,7 @@ Warning[:experimental] = false
 require 'pry-byebug'
 require_relative '../system/rt_tracker/app'
 
+require 'bundler/setup'
 require 'faker'
 require 'super_diff/rspec'
 require 'time_calc'
@@ -64,7 +65,7 @@ RSpec.configure do |config|
   config.include Dry::Effects::Handler.Timestamp
   config.include Module.new {
     extend RSpec::SharedContext
-    let(:deps) { {} }
+    let(:deps) { { 'lock_backend' => LockBackend::Succeeding } }
 
     def tc(time)
       (yield TimeCalc.wrap(time)).unwrap

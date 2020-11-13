@@ -71,6 +71,17 @@ RSpec.describe RtTracker::Routes::NumberAPI do
           expect(json_response).to eql(error: 'not enough data collected')
         end
       end
+
+      context 'rate limit' do
+        before { deps['lock_backend'] = LockBackend::Failing }
+
+        specify do
+          get '/numbers/russia'
+
+          expect(status).to eql(429)
+          expect(json_response).to eql(error: 'try again later')
+        end
+      end
     end
   end
 end
