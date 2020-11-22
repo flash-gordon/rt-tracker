@@ -63,6 +63,7 @@ RSpec.configure do |config|
   config.include Dry::Effects::Handler.Resolve(RtTracker::App)
   config.include Dry::Effects::Handler.CurrentTime
   config.include Dry::Effects::Handler.Timestamp
+  config.include Dry::Effects::Handler.Timeout
   config.include Module.new {
     extend RSpec::SharedContext
     let(:deps) { { 'lock_backend' => LockBackend::Succeeding } }
@@ -79,9 +80,11 @@ RSpec.configure do |config|
   config.around do |ex|
     provide(deps) do
       RtTracker::TaggedLogger.() do
-        with_timestamp do
-          with_current_time do
-            ex.run
+        with_timeout(10) do
+          with_timestamp do
+            with_current_time do
+              ex.run
+            end
           end
         end
       end
@@ -90,6 +93,7 @@ RSpec.configure do |config|
 
   config.include Dry::Effects.CurrentTime
   config.include Dry::Effects.Timestamp
+  config.include Dry::Effects.Timeout(:http)
 
   config.disable_monkey_patching!
 

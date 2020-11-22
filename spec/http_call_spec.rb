@@ -69,14 +69,17 @@ RSpec.describe RtTracker::HTTPCall, :webrick do
       end
 
       error = run_server do
-        http_call.(
+        cc = http_call.(
           url: "http://localhost:#{port}/",
           method: 'post',
           timeout: 0.3,
           headers: {
             'Content-Type' => 'plain/text'
           }
-        ).failure
+        )
+        # byebug
+        cc.failure
+
       end
 
       expect(error).to be_a(Timeout::Error)
