@@ -1,6 +1,10 @@
 require 'rt_tracker/http_call'
 
 RSpec.describe RtTracker::HTTPCall, :webrick do
+  include Dry::Effects::Handler.Timeout(:http)
+
+  around { with_timeout(10.0, &_1) }
+
   subject(:http_call) { described_class.new }
 
   before { deps['env.test'] = false }
@@ -93,5 +97,27 @@ RSpec.describe RtTracker::HTTPCall, :webrick do
     )
 
     expect(result).to be_a_success
+  end
+
+  context 'timeouts via effects' do
+    around { with_timeout(0.0, &_1) }
+
+    specify do
+      server.mount_proc '/' do |req, _|
+        caught_requests << [req.request_uri, req.header, req.body]
+      end
+
+      result = run_server do
+        http_call.(
+          url: "http://localhost:#{port}/",
+          headers: { 'Content-Type' => 'plain/text' },
+          method: 'post',
+          body: 'test'
+        )
+      end
+
+      expect(result.failure).to be_a(Net::ReadTimeout)
+      expect(caught_requests).to be_empty
+    end
   end
 end

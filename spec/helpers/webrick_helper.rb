@@ -20,6 +20,7 @@ module WEBrickHelper
 
   def run_server
     thread = ::Thread.new { server.start }
+    sleep(0.05)
     yield
   ensure
     server.stop

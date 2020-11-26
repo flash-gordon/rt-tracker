@@ -7,6 +7,7 @@ module RtTracker
   class HTTPCall
     include ::Dry::Monads[:try, :result]
     include ::Dry::Effects.Timestamp
+    include ::Dry::Effects.Timeout(:http)
 
     METHODS = {
       get: ::Net::HTTP::Get,
@@ -44,7 +45,7 @@ module RtTracker
       end
     end
 
-    def perform(url, method, headers, body, timeout: 30, basic_auth: Undefined)
+    def perform(url, method, headers, body, timeout: self.timeout, basic_auth: Undefined)
       uri = URI(url)
 
       options = {
