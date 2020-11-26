@@ -14,10 +14,11 @@ task cli: :env do
 
   stack.() do
     cli = RtTracker::CLIContext.new
+    stack = -> { Dry::Effects::Frame.stack.inspect[22...-1] }
     prompt = Pry::Prompt.new(
       :rt_tracker,
       'Custom prompt',
-      [proc { 'rt_tracker> ' }, proc { 'rt_tracker*> ' }]
+      [proc { "rt_tracker[#{stack.()}]> " }, proc { "rt_tracker[#{stack.()}]*> " }]
     )
     Pry.start(cli, prompt: prompt)
   end
