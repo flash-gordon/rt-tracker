@@ -8,6 +8,8 @@ RSpec.describe RtTracker::Routes::NumberAPI do
 
   let(:current_date) { tc(current_time) { _1.floor(:day) } }
 
+  before { deps['api.request_authenticated'] = -> _ { true } }
+
   around { with_random(seed: 314, &_1) }
 
   describe 'GET /numbers/:country' do
