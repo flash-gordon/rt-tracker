@@ -82,6 +82,21 @@ RSpec.describe RtTracker::Routes::NumberAPI do
           expect(json_response).to eql(error: 'try again later')
         end
       end
+
+      context 'country not found' do
+        before do
+          expect(gateway).to receive(:get).with(
+            path: '/country/unknown'
+          ).and_return(Failure([:bad_status_code, 404]))
+        end
+
+        specify do
+          get '/numbers/unknown'
+
+          expect(status).to eql(404)
+          expect(json_response).to eql(error: 'country not found')
+        end
+      end
     end
   end
 end

@@ -12,6 +12,10 @@ module RtTracker
 
       plugin :status_handler
 
+      status_handler(404) do
+        to_json.(error: 'country not found')
+      end
+
       status_handler(425) do
         to_json.(error: 'not enough data collected')
       end
@@ -34,6 +38,9 @@ module RtTracker
             nil
           in Failure[:try_again_later]
             response.status = 429
+            nil
+          in Failure[:bad_status_code, 404]
+            response.status = 404
             nil
           in Failure
             response.status = 503
