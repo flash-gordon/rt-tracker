@@ -52,6 +52,20 @@ module RtTracker
       ::File.expand_path("#{root}/lib"),
       ::File.expand_path("#{root}/app"),
     ])
+
+    class << self
+      attr_reader :lock
+    end
+
+    @lock = ::Mutex.new
+
+    def self.load_component(...)
+      if lock.owned?
+        super
+      else
+        lock.synchronize { super }
+      end
+    end
   end
 
   Import = App.injector(dynamic: App[:env].eql?('test'))
